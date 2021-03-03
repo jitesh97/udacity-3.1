@@ -2,6 +2,7 @@ Parameters:
   id:
     Description: Unique identifier.
     Type: String
+    Default: id
 
 Resources:
   WebsiteBucket:
