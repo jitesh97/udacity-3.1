@@ -54,9 +54,8 @@ jobs:
       - run: |
           aws cloudformation deploy \
             --template-file bucket.yml \
-            --stack-name "${CIRCLE_WORKFLOW_ID}" \
-            --parameter-overrides NAME="${CIRCLE_WORKFLOW_ID}"
-      - run: aws s3 sync . s3://"${CIRCLE_WORKFLOW_ID}" --delete
+            --stack-name "${CIRCLE_WORKFLOW_ID:0:7}" \
+            --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID:0:7}"
 
 # This is creating the Cloudfront Stack itself
   create_back_end:
@@ -78,6 +77,6 @@ workflows:
     #  - smoke_test:
     #      requires:
     #        - configure_infrastructure
-    #  - create_and_deploy_front_end
+      - create_and_deploy_front_end
       - create_back_end
     #     requires: create_and_deploy_front_end
