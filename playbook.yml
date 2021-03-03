@@ -3,5 +3,6 @@
   hosts: all
   user: ubuntu
   roles:
-  - host_key_check = False
   - setup
+  vars:
+    - ansible_host_key_checking: false
