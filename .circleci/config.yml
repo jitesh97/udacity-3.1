@@ -67,7 +67,7 @@ jobs:
           aws cloudformation deploy \
             --template-file cloudformation.yml \
             --stack-name cloudfront \
-            --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID}"
+            --parameter-overrides PipelineID="$udacity-3-bucket
 
 workflows:
   my_workflow:
