@@ -58,7 +58,8 @@ jobs:
             --parameter-overrides NAME="${CIRCLE_WORKFLOW_ID}"
       - run: aws s3 sync . s3://"${CIRCLE_WORKFLOW_ID}" --delete
 
-  promote_to_production:
+# This is creating the Cloudfront Stack itself
+  create_back_end:
     docker:
       - image: amazon/aws-cli
     steps:
@@ -78,5 +79,5 @@ workflows:
     #      requires:
     #        - configure_infrastructure
     #  - create_and_deploy_front_end
-      - promote_to_production
+      - create_back_end
     #     requires: [create_and_deploy_front_end]
