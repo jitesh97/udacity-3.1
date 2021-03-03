@@ -1,20 +1,20 @@
 Parameters:
-  NAME:
-    Description: Unique Identifier
+  MAME:
+    Description: Unique identifier.
     Type: String
 
-Resources:  
+Resources:
   WebsiteBucket:
-    Type: AWS::S3::Bucket    
+    Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub "${NAME}"
+      BucketName: !Sub "S3Bucket-${Name}"
       AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: 404.html
   
   WebsiteBucketPolicy:
-    Type: AWS::S3::BucketPolicy    
+    Type: AWS::S3::BucketPolicy
     Properties:
       Bucket: !Ref 'WebsiteBucket'
       PolicyDocument:
