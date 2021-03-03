@@ -73,7 +73,8 @@ jobs:
     - image: amazon/aws-cli
   steps:
     - checkout
-    - run: |
+    - run:
+      command: |
         aws cloudformation \
         list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
           --no-paginate --output text
