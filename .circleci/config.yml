@@ -53,7 +53,7 @@ jobs:
       - run: |
           aws cloudformation deploy \
             --template-file bucket.yml \
-            --stack-name "jg-${CIRCLE_WORKFLOW_ID}"" \
+            --stack-name "jg-${CIRCLE_WORKFLOW_ID}" \
             --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID}""
 
 # This is creating the Cloudfront Stack itself
