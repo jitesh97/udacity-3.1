@@ -68,6 +68,16 @@ jobs:
             --stack-name cloudfront \
             --parameter-overrides PipelineID="$udacity-3-bucket"
 
+  get_last_deployment_id:
+  docker:
+    - image: amazon/aws-cli
+  steps:
+    - checkout
+    - run: |
+        aws cloudformation \
+        list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
+          --no-paginate --output text
+
 workflows:
   my_workflow:
     jobs:
@@ -76,6 +86,7 @@ workflows:
     #  - smoke_test:
     #      requires:
     #        - configure_infrastructure
-      - create_and_deploy_front_end
+    #  - create_and_deploy_front_end
       - create_back_end
+      - get_last_deployment_id
     #     requires: create_and_deploy_front_end
