@@ -1,7 +1,6 @@
-Parameters:
-  NAME:
-    Description: S3 Bucket
-    Type: String
+#Parameters:
+#  NAME:
+#    Type: String
 
 Resources:  
   WebsiteBucket:
