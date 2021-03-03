@@ -1,6 +1,9 @@
 Parameters:
   NAME:
     Type: String
+    Default: name
+    Allowed Values:
+        - name
 
 Resources:  
   WebsiteBucket:
