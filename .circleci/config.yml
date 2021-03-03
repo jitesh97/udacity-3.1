@@ -65,7 +65,7 @@ jobs:
       - checkout
       - run: |
           aws cloudformation deploy \
-            --template-file cloudformation.yml \
+            --template-file cloudfront.yml \
             --stack-name cloudfront \
             --parameter-overrides PipelineID="$udacity-3-bucket"
 
