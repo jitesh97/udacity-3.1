@@ -45,7 +45,6 @@ jobs:
                 return 1
                 fi
 
-
   create_and_deploy_front_end:
     docker:
       - image: amazon/aws-cli
@@ -54,7 +53,7 @@ jobs:
       - run: |
           aws cloudformation deploy \
             --template-file bucket.yml \
-            --stack-name "${CIRCLE_WORKFLOW_ID}" \
+            --stack-name ${CIRCLE_WORKFLOW_ID} \
             --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID}"
 
 # This is creating the Cloudfront Stack itself
