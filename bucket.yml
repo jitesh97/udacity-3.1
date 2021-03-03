@@ -1,9 +1,7 @@
 Parameters:
   NAME:
+    Description: Unique Identifier
     Type: String
-    Default: name
-    Allowed Values:
-        - name
 
 Resources:  
   WebsiteBucket:
