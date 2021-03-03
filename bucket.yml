@@ -1,7 +1,8 @@
 Parameters:
   ID:
     Description: Unique identifier.
-    Type: 'AWS::SSM::Parameter::Value<String>'
+    Type: String
+    Default: ID
 
 Resources:
   WebsiteBucket:
