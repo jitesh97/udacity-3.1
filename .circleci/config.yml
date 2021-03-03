@@ -67,7 +67,7 @@ jobs:
           aws cloudformation deploy \
             --template-file cloudformation.yml \
             --stack-name cloudfront \
-            --parameter-overrides PipelineID="$udacity-3-bucket
+            --parameter-overrides PipelineID="$udacity-3-bucket"
 
 workflows:
   my_workflow:
@@ -77,6 +77,6 @@ workflows:
     #  - smoke_test:
     #      requires:
     #        - configure_infrastructure
-      - create_and_deploy_front_end
-    #  - promote_to_production
+    #  - create_and_deploy_front_end
+      - promote_to_production
     #     requires: [create_and_deploy_front_end]
