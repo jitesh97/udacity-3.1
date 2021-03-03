@@ -3,4 +3,5 @@
   hosts: all
   user: ubuntu
   roles:
+  - host_key_check = False
   - setup
