@@ -53,7 +53,7 @@ jobs:
                 then
                 return 0
                 else
-                return 2
+                return 1
                 fi
 workflows:
   my_workflow:
