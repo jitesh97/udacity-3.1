@@ -1,6 +1,7 @@
 Parameters:
   ID:
     Type: String
+    Default: "${ID}"
 
 Resources:
   WebsiteBucket:
