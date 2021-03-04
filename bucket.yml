@@ -2,7 +2,6 @@ Parameters:
   NAME:
     Description: Unique identifier.
     Type: String
-    Default: 'None'
 
 Resources:
   WebsiteBucket:
@@ -25,3 +24,8 @@ Resources:
           Principal: '*'
           Action: s3:GetObject
           Resource: !Join ['', ['arn:aws:s3:::', !Ref 'WebsiteBucket', /*]]
+
+Outputs:
+  WebsiteURL:
+    Value: !GetAtt WebsiteBucket.WebsiteURL
+    Description: URL for website hosted on S3
