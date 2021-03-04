@@ -108,7 +108,7 @@ jobs:
           command: |
             PREV_ID=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/PREV_ID)
               echo $PREV_ID
-              aws s3 rm "s3://s3-id-${PREV_ID}" --recursive
+              aws s3 rm "s3://s3-${PREV_ID}" --recursive
               aws cloudformation delete-stack --stack-name jg-${PREV_ID}
 
 
@@ -121,10 +121,10 @@ workflows:
     #      requires:
     #        - configure_infrastructure
     #  - get_last_deployment_id:
-#      - create_and_deploy_front_end
-#      - create_back_end:
-#          requires: [create_and_deploy_front_end]
-#      - get_last_deployment_id:
-#          requires: [create_back_end]
+      - create_and_deploy_front_end
+      - create_back_end:
+          requires: [create_and_deploy_front_end]
+      - get_last_deployment_id:
+          requires: [create_back_end]
       - clean_up_old_front_end
-#          requires: [get_last_deployment_id]
+          requires: [get_last_deployment_id]
