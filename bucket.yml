@@ -1,13 +1,12 @@
 Parameters:
   ID:
-    Description: Unique identifier.
     Type: String
 
 Resources:
   WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub "jiteshgrzz-${ID}"
+      BucketName: !Sub "jg-${ID}"
       AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html
