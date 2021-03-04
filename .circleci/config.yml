@@ -45,6 +45,7 @@ jobs:
                 return 1
                 fi
 
+# Frontend - Bucket with linked Stack
   create_and_deploy_front_end:
     docker:
       - image: amazon/aws-cli
@@ -59,7 +60,7 @@ jobs:
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
 #      - run: aws s3 sync . s3://"jg-${CIRCLE_WORKFLOW_ID:0:7}" --delete
 
-# This is creating the Cloudfront Stack itself
+# Backend - Stack (Cloudfront)
   create_back_end:
     docker:
       - image: amazon/aws-cli
@@ -71,6 +72,7 @@ jobs:
             --stack-name cloudfront \
             --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID}"
 
+# Procuring Last Deployment ID for Deletion
   get_last_deployment_id:
     docker:
       - image: amazon/aws-cli
@@ -79,14 +81,14 @@ jobs:
       - run:
           name: Capture old Pipeline ID
           command: |
-            export OLD_WORKFLOW=$(aws cloudformation \
+            OLD_WORKFLOW=$(aws cloudformation \
             list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
             --no-paginate --output text)
             echo $OLD_WORKFLOW
             curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID}" --request PUT \
               --data "$OLD_WORKFLOW" https://api.memstash.io/values/OLD_WORKFLOW
 
-
+# Delete last Bucket after running
   clean_up_old_front_end:
     docker:
       - image: amazon/aws-cli
@@ -100,25 +102,6 @@ jobs:
             aws cloudformation delete-stack --stack-name jg-${OLD_WORKFLOW:0:7}
 
 
-  clean_up_old_front_endzals:
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - run: 
-          name: Delete front end stackS
-          command: |
-            OLD_WORKFLOW=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/OLD_WORKFLOW)
-            CURRENT_ID=${CIRCLE_WORKFLOW_ID:0:7}
-            if [["$CURRENT_ID"!="$OLD_WORKFLOW"]]
-            then
-              echo "$OLD_WORKFLOW!=$CURRENT_ID"
-              aws s3 rm "s3://jg-${OLD_WORKFLOW}" --recursive
-              aws cloudformation delete-stack --stack-name "jg-${OLD_WORKFLOW}"
-            else
-              echo "$OLD_WORKFLOW==$CURRENT_ID"
-            fi
-
-
 workflows:
   my_workflow:
     jobs:
@@ -127,7 +110,6 @@ workflows:
     #  - smoke_test:
     #      requires:
     #        - configure_infrastructure
-    #  - get_last_deployment_id:
       - create_and_deploy_front_end
       - create_back_end:
           requires: [create_and_deploy_front_end]
