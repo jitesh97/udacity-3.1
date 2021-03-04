@@ -76,9 +76,10 @@ jobs:
       - run:
           name: Ensure backend infrastructure exist
           command: |
-            WorkflowID=$(aws cloudformation \
+            PREV_ID=$(aws cloudformation \
               list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
               --no-paginate --output text)
+              echo $PREV_ID
 
 
           #  PREV_PIPELINE_ID=$(aws cloudformation \
@@ -96,6 +97,6 @@ workflows:
     #        - configure_infrastructure
     #  - get_last_deployment_id:
       - create_and_deploy_front_end
-    #  - create_back_end
       - get_last_deployment_id
+    #  - create_back_end:
     #    requires: [create_and_deploy_front_end]
