@@ -56,7 +56,7 @@ jobs:
             aws cloudformation deploy \
               --template-file bucket.yml \
               --stack-name "jg-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="jg-${CIRCLE_WORKFLOW_ID:0:7}"
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
 #      - run: aws s3 sync . s3://"jg-${CIRCLE_WORKFLOW_ID:0:7}" --delete
 
 # This is creating the Cloudfront Stack itself
@@ -112,7 +112,7 @@ jobs:
             if [["$CURRENT_ID"!="$OLD_WORKFLOW"]]
             then
               echo "$OLD_WORKFLOW!=$CURRENT_ID"
-              aws s3 rm "s3://${OLD_WORKFLOW}" --recursive
+              aws s3 rm "s3://jg-${OLD_WORKFLOW}" --recursive
               aws cloudformation delete-stack --stack-name "jg-${OLD_WORKFLOW}"
             else
               echo "$OLD_WORKFLOW==$CURRENT_ID"
