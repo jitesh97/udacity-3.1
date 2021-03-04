@@ -1,0 +1,102 @@
+version: 2.1
+
+jobs:
+  create_infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Ensure backend infrastructure exist
+          command: |
+            aws cloudformation deploy \
+              --template-file template.yml \
+              --stack-name my-stack-${CIRCLE_WORKFLOW_ID}
+
+  configure_infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["0f:c3:bf:e4:55:e6:17:ce:66:2e:ac:0c:b7:97:c0:7f"] # You can get this ID in the section where you registered the SSH Key
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible # install the dependencies needed for your playbook
+      - run:
+          name: Configure servers
+          command: |
+            ansible-playbook -i inventory.txt playbook.yml
+
+  smoke_test:
+        docker:
+          - image: alpine:latest
+        steps:
+          - run: apk add --update curl
+          - run:
+              name: smoke test.
+              command: |
+                URL="https://blog.udacity.com/"
+                if curl -s --head ${URL} # test if blog.udacity. com exists
+                then
+                return 0
+                else
+                return 1
+                fi
+
+  create_and_deploy_front_end:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run: |
+          aws cloudformation deploy \
+            --template-file bucket.yml \
+            --stack-name "jg-${CIRCLE_WORKFLOW_ID}" \
+            --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID}"
+
+# This is creating the Cloudfront Stack itself
+  create_back_end:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run: |
+          aws cloudformation deploy \
+            --template-file cloudfront.yml \
+            --stack-name cloudfront \
+            --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID}"
+
+
+  get_last_deployment_id:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Ensure backend infrastructure exist
+          command: |
+            WorkflowID=$(aws cloudformation \
+              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+              --no-paginate --output text)
+
+
+          #  PREV_PIPELINE_ID=$(aws cloudformation \
+          #  list-exports --query "Exports[?Name==\`PipelineID\`].Value" \ 
+          #  --no-paginate --output text)
+          #  echo $PREV_PIPELINE_ID
+
+workflows:
+  my_workflow:
+    jobs:
+    # - create_infrastructure
+    #  - configure_infrastructure
+    #  - smoke_test:
+    #      requires:
+    #        - configure_infrastructure
+    #  - get_last_deployment_id:
+    # - create_and_deploy_front_end
+      - create_back_end
+      - get_last_deployment_id:
+    #    requires: [create_and_deploy_front_end]
