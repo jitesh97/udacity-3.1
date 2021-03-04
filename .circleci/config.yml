@@ -111,7 +111,7 @@ jobs:
             CURRENT_ID=${CIRCLE_WORKFLOW_ID:0:7}
             if [["$CURRENT_ID" != "$OLD_WORKFLOW"]]
             then
-              echo "$OLD_WORKFLOW != $CURRENT_ID"
+              echo "$OLD_WORKFLOW" != "$CURRENT_ID"
               aws s3 rm "s3://${OLD_WORKFLOW}" --recursive
               aws cloudformation delete-stack --stack-name "jg-${OLD_WORKFLOW}"
             else
