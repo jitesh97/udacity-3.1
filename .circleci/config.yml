@@ -94,7 +94,7 @@ jobs:
             if [["$CURRENT_ID" != "$PREV_ID"]]
             then
               echo "$PREV_ID
-            aws s3 rm "s3://jg-${PREV_ID}" --recursive
+            aws s3 rm "s3://${PREV_ID}" --recursive
             aws cloudformation delete-stack --stack-name "jg-${PREV_ID}"
 
 workflows:
