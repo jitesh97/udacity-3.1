@@ -77,7 +77,7 @@ jobs:
       name: workflow id capture
       command: |
         aws cloudformation \
-        list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+        list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
           --no-paginate --output text
 
 workflows:
@@ -88,7 +88,7 @@ workflows:
     #  - smoke_test:
     #      requires:
     #        - configure_infrastructure
-    #  - create_and_deploy_front_end
-      - create_back_end
+      - create_and_deploy_front_end
+    #  - create_back_end
       - get_last_deployment_id
     #     requires: create_and_deploy_front_end
