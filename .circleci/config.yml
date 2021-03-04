@@ -95,7 +95,7 @@ jobs:
           name: Delete front end stack
           command: |
             OLD_WORKFLOW=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/OLD_WORKFLOW)
-            echo $OLD_WORKFLOW:0:7
+            echo $OLD_WORKFLOW
             aws s3 rm "s3://jg-${OLD_WORKFLOW:0:7}" --recursive
             aws cloudformation delete-stack --stack-name jg-${OLD_WORKFLOW:0:7}
 
@@ -128,10 +128,10 @@ workflows:
     #      requires:
     #        - configure_infrastructure
     #  - get_last_deployment_id:
-    #  - create_and_deploy_front_end
-    #  - create_back_end:
-    #      requires: [create_and_deploy_front_end]
-      - get_last_deployment_id
-    #      requires: [create_back_end]
-      - clean_up_old_front_end
-   #       requires: [get_last_deployment_id]
+      - create_and_deploy_front_end
+      - create_back_end:
+          requires: [create_and_deploy_front_end]
+    #  - get_last_deployment_id
+          requires: [create_back_end]
+    #  - clean_up_old_front_end
+          requires: [get_last_deployment_id]
