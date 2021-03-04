@@ -82,7 +82,7 @@ jobs:
               echo $PREV_ID
             curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID}" --request PUT --data "$PREV_ID" https://api.memstash.io/values/PREV_ID
 
-  clean_up_old_front_end:
+  clean_up_old_front_endz:
     docker:
       - image: amazon/aws-cli
     steps:
@@ -98,6 +98,18 @@ jobs:
               aws cloudformation delete-stack --stack-name "jg-${PREV_ID}"
             else
               echo "$PREV_ID==$CURRENT_ID"
+
+  clean_up_old_front_end:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - run: 
+          name: Delete front end stack
+          command: |
+            PREV_ID=$(curl -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request GET https://api.memstash.io/values/PREV_ID)
+              echo "$PREV_ID
+              aws s3 rm "s3://${PREV_ID}" --recursive
+              aws cloudformation delete-stack --stack-name "jg-${PREV_ID}"
 
 
 workflows:
