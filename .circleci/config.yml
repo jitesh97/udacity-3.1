@@ -69,16 +69,16 @@ jobs:
             --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID}"
 
   get_last_deployment_id:
-  docker:
-    - image: amazon/aws-cli
-  steps:
-    - checkout
-    - run:
-      name: workflow id capture
-      command: |
-        aws cloudformation \
-        list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
-        --no-paginate --output text
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+        name: workflow id capture
+        command: |
+          aws cloudformation \
+          list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
+          --no-paginate --output text
 
 workflows:
   my_workflow:
