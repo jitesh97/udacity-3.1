@@ -56,7 +56,7 @@ jobs:
             aws cloudformation deploy \
               --template-file bucket.yml \
               --stack-name "jg-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
+              --parameter-overrides ID="jg-${CIRCLE_WORKFLOW_ID:0:7}"
       - run: aws s3 sync . s3://"${CIRCLE_WORKFLOW_ID}" --delete
 
 # This is creating the Cloudfront Stack itself
