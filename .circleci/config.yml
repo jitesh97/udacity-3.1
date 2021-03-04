@@ -108,7 +108,7 @@ jobs:
           command: |
             PREV_ID=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/PREV_ID)
               echo $PREV_ID
-              aws s3 rm "s3://${PREV_ID}" --recursive
+              aws s3 rm "s3://udacity-3-bucket-${PREV_ID}" --recursive
               aws cloudformation delete-stack --stack-name jg-${PREV_ID}
 
 
