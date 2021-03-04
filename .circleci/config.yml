@@ -87,22 +87,22 @@ jobs:
               --data "$OLD_WORKFLOW_ID" https://api.memstash.io/values/OLD_WORKFLOW
 
 
-  clean_up_old_front_endzzzzzz:
+  clean_up_old_front_end:
     docker:
       - image: amazon/aws-cli
     steps:
       - run: 
           name: Delete front end stack
           command: |
-            PREV_ID=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/PREV_ID)
+            OLD_WORKFLOW=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/OLD_WORKFLOW)
             CURRENT_ID=${CICRLCE_WORKFLOW_ID:0:7}
-            if [["$CURRENT_ID" != "$PREV_ID"]]
+            if [["$CURRENT_ID" != "$OLD_WORKFLOW"]]
             then
-              echo "$PREV_ID != $CURRENT_ID"
-              aws s3 rm "s3://${PREV_ID}" --recursive
-              aws cloudformation delete-stack --stack-name "jg-${PREV_ID}"
+              echo "$OLD_WORKFLOW != $CURRENT_ID"
+              aws s3 rm "s3://${OLD_WORKFLOW}" --recursive
+              aws cloudformation delete-stack --stack-name "jg-${OLD_WORKFLOW}"
             else
-              echo "$PREV_ID==$CURRENT_ID"
+              echo "$OLD_WORKFLOW==$CURRENT_ID"
 
   clean_up_old_front_endzzz:
     docker:
@@ -127,7 +127,7 @@ jobs:
             aws cloudformation delete-stack --stack-name "jg-${CIRCLE_WORKFLOW_ID:0:7}"
 
 
-  clean_up_old_front_end:
+  clean_up_old_front_endlast:
     docker:
       - image: amazon/aws-cli
     steps:
