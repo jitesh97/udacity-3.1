@@ -85,14 +85,14 @@ jobs:
               echo $PREV_ID
             curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID}" --request PUT --data "$PREV_ID" https://api.memstash.io/values/PREV_ID
 
-  clean_up_old_front_endzz:
+  clean_up_old_front_endzzzzzz:
     docker:
       - image: amazon/aws-cli
     steps:
       - run: 
           name: Delete front end stack
           command: |
-            PREV_ID=$(curl -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request GET https://api.memstash.io/values/PREV_ID)
+            PREV_ID=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/PREV_ID)
             CURRENT_ID=${CICRLCE_WORKFLOW_ID:0:7}
             if [["$CURRENT_ID" != "$PREV_ID"]]
             then
@@ -132,12 +132,10 @@ jobs:
       - run: 
           name: Delete front end stack
           command: |
-            BUCKETLIST=$(aws s3api list-buckets --query "Buckets[?starts_with(Name, 'jg-')].Name" --output text)
-            for bucket in ${BUCKETLIST}
-            do
-              echo $PREV_ID
-              aws s3 rm "s3://jg-${CIRCLE_WORKFLOW_ID:0:07}" --recursive
-              aws cloudformation delete-stack --stack-name "jg-${CIRCLE_WORKFLOW_ID:0:07}"
+            PREV_ID=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/PREV_ID)
+            echo $PREV_ID
+            aws s3 rm "s3://udapeople-${PREV_ID}" --recursive
+            aws cloudformation delete-stack --stack-name jg-${OLD_WORKFLOW_ID}
 
 
 workflows:
