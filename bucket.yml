@@ -2,6 +2,7 @@ Parameters:
   NAME:
     Description: Unique identifier.
     Type: String
+    Default: 'None'
 
 Resources:
   WebsiteBucket:
