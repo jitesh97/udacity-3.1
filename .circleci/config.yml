@@ -78,7 +78,7 @@ jobs:
       command: |
         aws cloudformation \
         list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
-          --no-paginate --output text
+        --no-paginate --output text
 
 workflows:
   my_workflow:
