@@ -72,12 +72,13 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
+      - checkout
       - run:
         name: workflow id capture
         command: |
           aws cloudformation \
-          list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
-          --no-paginate --output text
+            list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
+            --no-paginate --output text
 
 workflows:
   my_workflow:
