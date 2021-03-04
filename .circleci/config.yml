@@ -74,6 +74,7 @@ jobs:
   steps:
     - checkout
     - run:
+      name: workflow id capture
       command: |
         aws cloudformation \
         list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
