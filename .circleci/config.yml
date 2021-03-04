@@ -75,11 +75,11 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Workflow id capture
-        command: |
-          aws cloudformation \
-            list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
-            --no-paginate --output text
+          name: Ensure backend infrastructure exist
+          command: |
+            aws cloudformation \
+              list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
+              --no-paginate --output text
 
 workflows:
   my_workflow:
