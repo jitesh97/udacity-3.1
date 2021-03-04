@@ -87,7 +87,7 @@ jobs:
               --data "$OLD_WORKFLOW" https://api.memstash.io/values/OLD_WORKFLOW
 
 
-  clean_up_old_front_end:
+  clean_up_old_front_endlast:
     docker:
       - image: amazon/aws-cli
     steps:
@@ -100,7 +100,7 @@ jobs:
             aws cloudformation delete-stack --stack-name jg-${OLD_WORKFLOW}
 
 
-  clean_up_old_front_endlast:
+  clean_up_old_front_end:
     docker:
       - image: amazon/aws-cli
     steps:
@@ -112,7 +112,7 @@ jobs:
             if [["$CURRENT_ID"!="$OLD_WORKFLOW"]]
             then
               echo "$OLD_WORKFLOW!=$CURRENT_ID"
-              aws s3 rm "s3://jg-${OLD_WORKFLOW}" --recursive
+              aws s3 rm "s3://jg-${OLD_WORKFLOW:0:7}" --recursive
               aws cloudformation delete-stack --stack-name "jg-${OLD_WORKFLOW}"
             else
               echo "$OLD_WORKFLOW==$CURRENT_ID"
