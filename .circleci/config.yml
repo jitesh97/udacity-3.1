@@ -100,7 +100,7 @@ jobs:
             aws cloudformation delete-stack --stack-name jg-${OLD_WORKFLOW}
 
 
-  clean_up_old_front_end:
+  clean_up_old_front_endzals:
     docker:
       - image: amazon/aws-cli
     steps:
