@@ -80,7 +80,7 @@ jobs:
           name: Capture old Pipeline ID
           command: |
             OLD_WORKFLOW=$(aws cloudformation \
-            list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+            list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
             --no-paginate --output text)
             echo $OLD_WORKFLOW
             curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID}" --request PUT \
@@ -128,10 +128,10 @@ workflows:
     #      requires:
     #        - configure_infrastructure
     #  - get_last_deployment_id:
-    #  - create_and_deploy_front_end
-    #  - create_back_end:
-    #      requires: [create_and_deploy_front_end]
-      - get_last_deployment_id
-    #      requires: [create_back_end]
-      - clean_up_old_front_end
-    #      requires: [get_last_deployment_id]
+      - create_and_deploy_front_end
+      - create_back_end:
+          requires: [create_and_deploy_front_end]
+      - get_last_deployment_id:
+          requires: [create_back_end]
+      - clean_up_old_front_end:
+          requires: [get_last_deployment_id]
