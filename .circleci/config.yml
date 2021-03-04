@@ -126,5 +126,5 @@ workflows:
           requires: [create_and_deploy_front_end]
       - get_last_deployment_id:
           requires: [create_back_end]
-      - clean_up_old_front_end
+      - clean_up_old_front_end:
           requires: [get_last_deployment_id]
