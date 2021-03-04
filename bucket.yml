@@ -1,7 +1,6 @@
 Parameters:
   ID:
     Type: String
-    Default: "${CIRCLE_WORKFLOW_ID:0:7}"
 
 Resources:
   WebsiteBucket:
