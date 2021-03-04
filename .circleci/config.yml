@@ -78,8 +78,7 @@ jobs:
           name: Ensure backend infrastructure exist
           command: |
             aws cloudformation \
-              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-              --no-paginate --output text
+              list-exports --query "Exports[?Name==\`PipelineID\`].Value" \ --no-paginate --output text
 
 workflows:
   my_workflow:
