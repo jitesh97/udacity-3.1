@@ -103,6 +103,7 @@ jobs:
               aws cloudformation delete-stack --stack-name "jg-${OLD_WORKFLOW}"
             else
               echo "$OLD_WORKFLOW==$CURRENT_ID"
+            fi
 
   clean_up_old_front_endzzz:
     docker:
