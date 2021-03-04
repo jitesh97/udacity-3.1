@@ -121,8 +121,8 @@ jobs:
       - run: 
           name: Delete front end stack
           command: |
-            aws s3 rm "s3://jg-${PREV_ID}" --recursive
-            aws cloudformation delete-stack --stack-name "jg-${PREV_ID}"
+            aws s3 rm "s3://jg-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
+            aws cloudformation delete-stack --stack-name "jg-${CIRCLE_WORKFLOW_ID:0:7}"
 
 
 workflows:
