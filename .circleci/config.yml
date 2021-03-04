@@ -87,7 +87,7 @@ jobs:
               --data "$OLD_WORKFLOW" https://api.memstash.io/values/OLD_WORKFLOW
 
 
-  clean_up_old_front_endlast:
+  clean_up_old_front_end:
     docker:
       - image: amazon/aws-cli
     steps:
@@ -100,7 +100,7 @@ jobs:
             aws cloudformation delete-stack --stack-name jg-${OLD_WORKFLOW}
 
 
-  clean_up_old_front_end:
+  clean_up_old_front_endlast:
     docker:
       - image: amazon/aws-cli
     steps:
@@ -128,10 +128,10 @@ workflows:
     #      requires:
     #        - configure_infrastructure
     #  - get_last_deployment_id:
-      - create_and_deploy_front_end
-      - create_back_end:
-          requires: [create_and_deploy_front_end]
-      - get_last_deployment_id:
-          requires: [create_back_end]
-      - clean_up_old_front_end:
-          requires: [get_last_deployment_id]
+    #  - create_and_deploy_front_end
+    #  - create_back_end:
+    #      requires: [create_and_deploy_front_end]
+      - get_last_deployment_id
+    #      requires: [create_back_end]
+      - clean_up_old_front_end
+    #      requires: [get_last_deployment_id]
