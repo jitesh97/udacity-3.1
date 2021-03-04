@@ -85,7 +85,7 @@ jobs:
               echo $PREV_ID
             curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID}" --request PUT --data "$PREV_ID" https://api.memstash.io/values/PREV_ID
 
-  clean_up_old_front_end:
+  clean_up_old_front_endzz:
     docker:
       - image: amazon/aws-cli
     steps:
@@ -102,7 +102,7 @@ jobs:
             else
               echo "$PREV_ID==$CURRENT_ID"
 
-  clean_up_old_front_endz:
+  clean_up_old_front_endzz:
     docker:
       - image: amazon/aws-cli
     steps:
@@ -114,6 +114,16 @@ jobs:
               aws s3 rm "s3://s3-${PREV_ID}" --recursive
               aws cloudformation delete-stack --stack-name "jg-${PREV_ID}"
 
+  clean_up_old_front_end:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - run: 
+          name: Delete front end stack
+          command: |
+            aws s3 rm "s3://jg-${PREV_ID}" --recursive
+            aws cloudformation delete-stack --stack-name "jg-${PREV_ID}"
+
 
 workflows:
   my_workflow:
@@ -124,10 +134,10 @@ workflows:
     #      requires:
     #        - configure_infrastructure
     #  - get_last_deployment_id:
-      - create_and_deploy_front_end
-      - create_back_end:
-          requires: [create_and_deploy_front_end]
-      - get_last_deployment_id:
-          requires: [create_back_end]
+    #  - create_and_deploy_front_end
+    #  - create_back_end:
+    #      requires: [create_and_deploy_front_end]
+    #  - get_last_deployment_id:
+    #      requires: [create_back_end]
       - clean_up_old_front_end:
           requires: [get_last_deployment_id]
